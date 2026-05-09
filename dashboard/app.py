@@ -10,6 +10,14 @@ import plotly.express as px
 import duckdb
 import sys
 import os
+import subprocess
+
+# ── Generate data if database doesn't exist ────────────────────────────────────
+
+if not os.path.exists(DB_PATH):
+    st.info("Database not found. Running analysis... This may take a moment.")
+    subprocess.run(["python", "src/analyzer.py"], check=True)
+    st.rerun()
 
 # ── Database path ──────────────────────────────────────────────────────────────
 
