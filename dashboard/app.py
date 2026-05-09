@@ -10,16 +10,6 @@ import plotly.express as px
 import duckdb
 import sys
 import os
-import sys
-sys.path.append("src")
-from analyzer import main as run_analysis
-
-# ── Generate data if database doesn't exist ────────────────────────────────────
-
-if not os.path.exists(DB_PATH):
-    with st.spinner("Running analysis for the first time... Please wait."):
-        run_analysis()
-    st.rerun()
 
 # ── Database path ──────────────────────────────────────────────────────────────
 
@@ -27,11 +17,13 @@ DB_PATH = "data/processed/reddit_analysis.db"
 
 # ── Generate data if database doesn't exist ────────────────────────────────────
 
-if not os.path.exists(DB_PATH):
-    st.info("Database not found. Running analysis... This may take a moment.")
-    subprocess.run(["python", "src/analyzer.py"], check=True)
-    st.rerun()
+sys.path.append("src")
 
+if not os.path.exists(DB_PATH):
+    from analyzer import main as run_analysis
+    with st.spinner("Running analysis for the first time... Please wait."):
+        run_analysis()
+    st.rerun()
 
 # ── Page config ────────────────────────────────────────────────────────────────
 
