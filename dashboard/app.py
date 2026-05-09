@@ -102,6 +102,10 @@ def load_posts():
 def load_keyword_hits():
     return pd.read_csv("data/processed/keyword_hits.csv")
 
+sentiment_df = load_sentiment_summary()
+posts_df = load_posts()
+keywords_df = load_keyword_hits()
+
 # ── Metrics ────────────────────────────────────────────────────────────────────
 
 col1, col2, col3 = st.columns(3)
