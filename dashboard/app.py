@@ -12,6 +12,10 @@ import sys
 import os
 import subprocess
 
+# ── Database path ──────────────────────────────────────────────────────────────
+
+DB_PATH = "data/processed/reddit_analysis.db"
+
 # ── Generate data if database doesn't exist ────────────────────────────────────
 
 if not os.path.exists(DB_PATH):
@@ -19,9 +23,6 @@ if not os.path.exists(DB_PATH):
     subprocess.run(["python", "src/analyzer.py"], check=True)
     st.rerun()
 
-# ── Database path ──────────────────────────────────────────────────────────────
-
-DB_PATH = "data/processed/reddit_analysis.db"
 
 # ── Page config ────────────────────────────────────────────────────────────────
 
