@@ -29,10 +29,11 @@ jobs:
       - name: Run analyzer
         run: python src/analyzer.py
 
-      - name: Commit updated database
+- name: Commit updated database
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull origin main
           git add data/processed/
-          git commit -m "chore: automated daily analysis update" || echo "No changes to commit"
-          git push
+          git diff --staged --quiet || git commit -m "chore: automated daily analysis update"
+          git push origin main
