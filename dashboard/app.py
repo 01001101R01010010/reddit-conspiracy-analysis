@@ -13,7 +13,7 @@ import os
 
 # ── Database path ──────────────────────────────────────────────────────────────
 
-DB_PATH = "data/processed/reddit_analysis.db"
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "processed", "reddit_analysis.db")
 
 # ── Generate data if database doesn't exist ────────────────────────────────────
 
