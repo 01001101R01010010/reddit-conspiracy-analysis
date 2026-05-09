@@ -92,28 +92,15 @@ st.markdown("---")
 
 @st.cache_data
 def load_sentiment_summary():
-    con = duckdb.connect(DB_PATH)
-    df = con.execute("SELECT * FROM sentiment_summary ORDER BY run_date DESC").df()
-    con.close()
-    return df
+    return pd.read_csv("data/processed/sentiment_summary.csv")
 
 @st.cache_data
 def load_posts():
-    con = duckdb.connect(DB_PATH)
-    df = con.execute("SELECT * FROM posts").df()
-    con.close()
-    return df
+    return pd.read_csv("data/processed/posts.csv")
 
 @st.cache_data
 def load_keyword_hits():
-    con = duckdb.connect(DB_PATH)
-    df = con.execute("SELECT * FROM keyword_hits ORDER BY conspiracy_count DESC").df()
-    con.close()
-    return df
-
-sentiment_df = load_sentiment_summary()
-posts_df = load_posts()
-keywords_df = load_keyword_hits()
+    return pd.read_csv("data/processed/keyword_hits.csv")
 
 # ── Metrics ────────────────────────────────────────────────────────────────────
 
