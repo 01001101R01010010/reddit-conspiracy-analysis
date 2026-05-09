@@ -2,8 +2,11 @@ name: Daily Analysis Pipeline
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # Every day at 3:00 AM UTC
-  workflow_dispatch:  # Allow manual trigger from GitHub
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-pipeline:
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
