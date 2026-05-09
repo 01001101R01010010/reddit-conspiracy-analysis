@@ -1,0 +1,33 @@
+name: Daily Analysis Pipeline
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Every day at 3:00 AM UTC
+  workflow_dispatch:  # Allow manual trigger from GitHub
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run analyzer
+        run: python src/analyzer.py
+
+      - name: Commit updated database
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add data/processed/
+          git commit -m "chore: automated daily analysis update" || echo "No changes to commit"
+          git push
