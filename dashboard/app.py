@@ -23,6 +23,55 @@ st.set_page_config(
     layout="wide"
 )
 
+# ── Custom CSS ─────────────────────────────────────────────────────────────────
+
+st.markdown("""
+    <style>
+        /* Main background */
+        .stApp {
+            background-color: #0a0a0a;
+        }
+        
+        /* Title styling */
+        h1 {
+            font-family: monospace;
+            font-size: 3rem !important;
+            font-weight: 900 !important;
+            letter-spacing: -2px;
+            color: #ffffff !important;
+            border-bottom: 3px solid #ff0000;
+            padding-bottom: 10px;
+        }
+        
+        /* Headers */
+        h2, h3 {
+            font-family: monospace;
+            color: #ffffff !important;
+            border-left: 4px solid #ff0000;
+            padding-left: 10px;
+        }
+        
+        /* Metrics */
+        [data-testid="stMetric"] {
+            background-color: #111111;
+            border: 1px solid #333333;
+            border-left: 4px solid #ff0000;
+            padding: 15px;
+            font-family: monospace;
+        }
+        
+        /* Dataframe */
+        .stDataFrame {
+            border: 1px solid #333333;
+        }
+
+        /* Selectbox */
+        .stSelectbox {
+            font-family: monospace;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # ── Header ─────────────────────────────────────────────────────────────────────
 
 st.title("🔍 Anatomy of Belief")
@@ -82,9 +131,18 @@ fig_sentiment = px.bar(
     x='category',
     y='avg_compound',
     color='category',
-    title='Average Sentiment Score: Conspiracy vs Mainstream',
-    labels={'avg_compound': 'Average Sentiment (VADER)', 'category': 'Community Type'},
-    color_discrete_map={'conspiracy_count': 'red', 'mainstream_count': 'blue'}
+    title='SENTIMENT ANALYSIS',
+    labels={'avg_compound': 'AVG SENTIMENT (VADER)', 'category': 'COMMUNITY TYPE'},
+    color_discrete_map={'conspiracy': '#ff0000', 'mainstream': '#ffffff'}
+)
+fig_sentiment.update_layout(
+    paper_bgcolor='#0a0a0a',
+    plot_bgcolor='#0a0a0a',
+    font=dict(family='monospace', color='white'),
+    title_font=dict(size=20, color='white'),
+    xaxis=dict(gridcolor='#222222', color='white'),
+    yaxis=dict(gridcolor='#222222', color='white'),
+    showlegend=False
 )
 st.plotly_chart(fig_sentiment, use_container_width=True)
 
@@ -109,11 +167,18 @@ fig_keywords = px.bar(
     y='count',
     color='category',
     barmode='group',
-    title='Conspiracy Theory Keywords: Conspiracy vs Mainstream',
-    labels={'count': 'Number of Posts', 'keyword': 'Keyword'},
-    color_discrete_map={'conspiracy_count': 'red', 'mainstream_count': 'blue'}
+    title='CONSPIRACY THEORY KEYWORDS DETECTED',
+    labels={'count': 'NUMBER OF POSTS', 'keyword': 'KEYWORD'},
+    color_discrete_map={'conspiracy_count': '#ff0000', 'mainstream_count': '#ffffff'}
 )
-fig_keywords.update_layout(xaxis_tickangle=-45)
+fig_keywords.update_layout(
+    paper_bgcolor='#0a0a0a',
+    plot_bgcolor='#0a0a0a',
+    font=dict(family='monospace', color='white'),
+    title_font=dict(size=20, color='white'),
+    xaxis=dict(gridcolor='#222222', color='white', tickangle=-45),
+    yaxis=dict(gridcolor='#222222', color='white'),
+)
 st.plotly_chart(fig_keywords, use_container_width=True)
 
 st.markdown("---")
