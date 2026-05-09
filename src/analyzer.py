@@ -15,6 +15,7 @@ from collections import Counter
 import re
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from datasets import load_dataset
+from storage import init_database, save_posts, save_sentiment_summary, save_keyword_hits
 
 
 # ── Constants ──────────────────────────────────────────────────────────────────
@@ -209,6 +210,15 @@ def main():
     }).sort_values('conspiracy', ascending=False)
 
     print(results.to_string(index=False))
+
+    # ── Save to database
+    print("\n" + "=" * 50)
+    print("SAVING TO DATABASE")
+    print("=" * 50)
+    init_database()
+    save_posts(df)
+    save_sentiment_summary(df)
+    save_keyword_hits(results)
 
     print("\nAnalysis complete!")
     return df
