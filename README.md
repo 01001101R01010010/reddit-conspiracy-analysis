@@ -40,10 +40,11 @@ This project is an NLP data pipeline that analyzes linguistic and emotional patt
 
 ## Project Structure
 
+```
 reddit-conspiracy-analysis/
 ├── src/
-│   ├── analyzer.py        # NLP pipeline - sentiment, word frequency, bigrams
-│   └── storage.py         # DuckDB storage module
+│   ├── analyzer.py        # NLP pipeline
+│   └── storage.py         # DuckDB storage
 ├── dashboard/
 │   └── app.py             # Streamlit dashboard
 ├── notebooks/
@@ -54,6 +55,7 @@ reddit-conspiracy-analysis/
 │   └── workflows/
 │       └── pipeline.yml   # GitHub Actions automation
 └── Dockerfile             # Container configuration
+```
 
 ---
 
