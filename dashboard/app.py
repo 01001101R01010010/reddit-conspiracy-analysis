@@ -141,8 +141,9 @@ CHART_LAYOUT = dict(
     plot_bgcolor=LIGHT,
     font=dict(family='monospace', color='#1a1a1a'),
     title_font=dict(size=16, color='#1a1a1a', family='monospace'),
-    xaxis=dict(gridcolor='#e0e0e0', color='#444444', linecolor='#cccccc'),
-    yaxis=dict(gridcolor='#e0e0e0', color='#444444', linecolor='#cccccc'),
+    xaxis=dict(gridcolor='#e0e0e0', color='#1a1a1a', linecolor='#cccccc'),
+    yaxis=dict(gridcolor='#e0e0e0', color='#1a1a1a', linecolor='#cccccc'),
+    legend=dict(font=dict(color='#1a1a1a', family='monospace')),
 )
 
 # ── Sentiment chart ────────────────────────────────────────────────────────────

@@ -8,13 +8,8 @@ import duckdb
 import pandas as pd
 from datetime import datetime
 
-
-# ── Constants ──────────────────────────────────────────────────────────────────
-
 DB_PATH = "data/processed/reddit_analysis.db"
 
-
-# ── Database Setup ─────────────────────────────────────────────────────────────
 
 def init_database():
     """Create database tables if they don't exist."""
@@ -52,23 +47,22 @@ def init_database():
     print(f"Database initialized: {DB_PATH}")
 
 
-# ── Save Functions ─────────────────────────────────────────────────────────────
-
 def save_posts(df):
-    """Save analyzed posts to database."""
+    """Save analyzed posts to database - replaces today's data."""
     con = duckdb.connect(DB_PATH)
     today = datetime.today().date()
 
     df_to_save = df[['title', 'subreddit', 'category', 'compound']].copy()
     df_to_save['run_date'] = today
 
+    con.execute("DELETE FROM posts WHERE run_date = ?", [today])
     con.execute("INSERT INTO posts SELECT * FROM df_to_save")
     con.close()
     print(f"Saved {len(df_to_save)} posts to database")
 
 
 def save_sentiment_summary(df):
-    """Save average sentiment per category to database."""
+    """Save average sentiment per category - replaces today's data."""
     con = duckdb.connect(DB_PATH)
     today = datetime.today().date()
 
@@ -78,23 +72,23 @@ def save_sentiment_summary(df):
     ).reset_index()
     summary['run_date'] = today
 
+    con.execute("DELETE FROM sentiment_summary WHERE run_date = ?", [today])
     con.execute("INSERT INTO sentiment_summary SELECT * FROM summary")
     con.close()
     print("Saved sentiment summary to database")
 
 
 def save_keyword_hits(results_df):
-    """Save conspiracy keyword hits to database."""
+    """Save conspiracy keyword hits - replaces today's data."""
     con = duckdb.connect(DB_PATH)
     today = datetime.today().date()
 
     results_df['run_date'] = today
+    con.execute("DELETE FROM keyword_hits WHERE run_date = ?", [today])
     con.execute("INSERT INTO keyword_hits SELECT * FROM results_df")
     con.close()
     print("Saved keyword hits to database")
 
-
-# ── Read Functions ─────────────────────────────────────────────────────────────
 
 def get_sentiment_summary():
     """Read sentiment summary from database."""
