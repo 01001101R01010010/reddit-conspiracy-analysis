@@ -8,6 +8,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+from nrclex import NRCLex
 
 DB_PATH = "data/processed/reddit_analysis.db"
 
@@ -111,6 +112,28 @@ def load_posts():
 def load_keywords():
     return pd.read_csv("data/processed/keyword_hits.csv")
 
+EMOTIONS = ['fear', 'anger', 'trust', 'joy', 'sadness', 'disgust', 'anticipation', 'surprise']
+
+@st.cache_data
+def compute_emotion_summary(posts):
+    def get_emotions(text):
+        try:
+            emo = NRCLex(str(text))
+            emo.load_raw_text(str(text))
+            return emo.affect_frequencies
+        except Exception:
+            return {}
+
+    records = []
+    for _, row in posts.iterrows():
+        freqs = get_emotions(row['title'])
+        record = {'category': row['category']}
+        for e in EMOTIONS:
+            record[e] = freqs.get(e, 0.0)
+        records.append(record)
+    emo_df = pd.DataFrame(records)
+    return emo_df.groupby('category')[EMOTIONS].mean().reset_index()
+
 sentiment_df = load_sentiment()
 posts_df = load_posts()
 keywords_df = load_keywords()
@@ -120,15 +143,31 @@ keywords_df = load_keywords()
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric("Total Posts Analyzed", len(posts_df))
+    st.metric(
+        "Total Posts Analyzed",
+        len(posts_df),
+        help="Number of Reddit posts processed from r/conspiracy, r/conspiracytheories, r/science, r/worldnews and r/news via pushshift archive"
+    )
 with col2:
     cons = sentiment_df[sentiment_df['category'] == 'conspiracy']['avg_compound'].mean()
-    st.metric("Conspiracy Avg Sentiment", round(cons, 4))
+    st.metric(
+        "Conspiracy Avg Sentiment",
+        round(cons, 4),
+        help="Average VADER compound score for conspiracy posts. Scale: -1 (most negative) to +1 (most positive)"
+    )
 with col3:
     main = sentiment_df[sentiment_df['category'] == 'mainstream']['avg_compound'].mean()
-    st.metric("Mainstream Avg Sentiment", round(main, 4))
+    st.metric(
+        "Mainstream Avg Sentiment",
+        round(main, 4),
+        help="Average VADER compound score for mainstream posts. Scale: -1 (most negative) to +1 (most positive)"
+    )
 with col4:
-    st.metric("Sentiment Gap", round(cons - main, 4))
+    st.metric(
+        "Sentiment Gap",
+        round(cons - main, 4),
+        help="Difference between conspiracy and mainstream sentiment. Negative value means conspiracy is more negative than mainstream"
+    )
 
 st.markdown("---")
 
@@ -193,6 +232,32 @@ st.plotly_chart(fig_compare, use_container_width=True)
 
 st.markdown("---")
 
+# ── Emotion analysis ──────────────────────────────────────────────────────────
+
+st.header("Emotion Analysis")
+st.caption("Average NRCLex emotion scores per post title, grouped by community type")
+
+with st.spinner("Computing emotion scores..."):
+    emotion_summary = compute_emotion_summary(posts_df)
+
+emo_melted = emotion_summary.melt(id_vars='category', value_vars=EMOTIONS, var_name='emotion', value_name='score')
+emo_melted['category'] = emo_melted['category'].str.capitalize()
+
+fig_emotion = px.bar(
+    emo_melted,
+    x='emotion',
+    y='score',
+    color='category',
+    barmode='group',
+    title='EMOTION PROFILE: CONSPIRACY VS MAINSTREAM',
+    labels={'score': 'Avg Emotion Score', 'emotion': 'Emotion'},
+    color_discrete_map={'Conspiracy': ORANGE, 'Mainstream': GRAY}
+)
+fig_emotion.update_layout(**CHART_LAYOUT)
+st.plotly_chart(fig_emotion, use_container_width=True)
+
+st.markdown("---")
+
 # ── Keyword hits ──────────────────────────────────────────────────────────────
 
 st.header("Conspiracy Theory Keywords")
@@ -202,20 +267,25 @@ keywords_filtered = keywords_df[
 ].copy()
 
 if not keywords_filtered.empty:
+    kw_melted = keywords_filtered.melt(
+        id_vars='keyword',
+        value_vars=['conspiracy_count', 'mainstream_count'],
+        var_name='category',
+        value_name='count'
+    )
+    kw_melted['category'] = kw_melted['category'].map({
+        'conspiracy_count': 'Conspiracy',
+        'mainstream_count': 'Mainstream'
+    })
     fig_keywords = px.bar(
-        keywords_filtered.melt(
-            id_vars='keyword',
-            value_vars=['conspiracy_count', 'mainstream_count'],
-            var_name='category',
-            value_name='count'
-        ),
+        kw_melted,
         x='keyword',
         y='count',
         color='category',
         barmode='group',
         title='CONSPIRACY THEORY KEYWORDS DETECTED',
         labels={'count': 'Number of Posts', 'keyword': 'Keyword'},
-        color_discrete_map={'conspiracy_count': ORANGE, 'mainstream_count': GRAY}
+        color_discrete_map={'Conspiracy': ORANGE, 'Mainstream': GRAY}
     )
     fig_keywords.update_layout(**CHART_LAYOUT)
     fig_keywords.update_layout(xaxis_tickangle=-45)
