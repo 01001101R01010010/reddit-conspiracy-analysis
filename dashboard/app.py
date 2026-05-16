@@ -19,31 +19,94 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-        .stApp { background-color: #0a0a0a; }
+        /* Main background - off white */
+        .stApp {
+            background-color: #f5f5f0;
+        }
+        
+        /* Title */
         h1 {
-            font-family: monospace;
+            font-family: monospace !important;
             font-size: 3rem !important;
             font-weight: 900 !important;
-            letter-spacing: -2px;
-            color: #ffffff !important;
-            border-bottom: 3px solid #ff0000;
+            letter-spacing: -3px !important;
+            color: #000000 !important;
+            border-bottom: 5px solid #ff0000;
             padding-bottom: 10px;
+            text-transform: uppercase;
         }
+        
+        /* Headers */
         h2, h3 {
-            font-family: monospace;
-            color: #ffffff !important;
-            border-left: 4px solid #ff0000;
-            padding-left: 10px;
+            font-family: monospace !important;
+            color: #000000 !important;
+            border-left: 6px solid #ff0000;
+            padding-left: 12px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
         }
+
+        /* Subheader */
+        .stMarkdown p {
+            font-family: monospace;
+            color: #333333;
+        }
+        
+        /* Metrics */
         [data-testid="stMetric"] {
-            background-color: #111111;
-            border: 1px solid #333333;
-            border-left: 4px solid #ff0000;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-left: 6px solid #ff0000;
             padding: 15px;
             font-family: monospace;
         }
-        .stDataFrame { border: 1px solid #333333; }
-        .stSelectbox { font-family: monospace; }
+
+        [data-testid="stMetricLabel"] {
+            font-family: monospace !important;
+            color: #000000 !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem !important;
+        }
+
+        [data-testid="stMetricValue"] {
+            font-family: monospace !important;
+            color: #000000 !important;
+            font-size: 1.8rem !important;
+        }
+        
+        /* Dataframe */
+        .stDataFrame {
+            border: 2px solid #000000;
+        }
+
+        /* Selectbox */
+        .stSelectbox label {
+            font-family: monospace !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+        }
+
+        /* Divider */
+        hr {
+            border: none;
+            border-top: 2px solid #000000;
+            margin: 2rem 0;
+        }
+
+        /* Caption */
+        .stCaption {
+            font-family: monospace !important;
+            color: #666666 !important;
+            border-top: 1px solid #cccccc;
+            padding-top: 10px;
+        }
+
+        /* Sidebar if needed */
+        section[data-testid="stSidebar"] {
+            background-color: #000000;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -112,12 +175,12 @@ else:
     )
 
 fig_compare.update_layout(
-    paper_bgcolor='#0a0a0a',
-    plot_bgcolor='#0a0a0a',
-    font=dict(family='monospace', color='white'),
-    title_font=dict(size=18, color='white'),
-    xaxis=dict(gridcolor='#222222', color='white'),
-    yaxis=dict(gridcolor='#222222', color='white'),
+    paper_bgcolor='#f5f5f0',
+    plot_bgcolor='#f5f5f0',
+    font=dict(family='monospace', color='black'),
+    title_font=dict(size=18, color='black'),
+    xaxis=dict(gridcolor='#cccccc', color='black'),
+    yaxis=dict(gridcolor='#cccccc', color='black'),
 )
 st.plotly_chart(fig_compare, use_container_width=True)
 
