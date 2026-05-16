@@ -138,12 +138,27 @@ LIGHT = '#fafaf8'
 
 CHART_LAYOUT = dict(
     paper_bgcolor=LIGHT,
-    plot_bgcolor=LIGHT,
-    font=dict(family='monospace', color='#1a1a1a'),
+    plot_bgcolor='#ffffff',
+    font=dict(family='monospace', color='#1a1a1a', size=12),
     title_font=dict(size=16, color='#1a1a1a', family='monospace'),
-    xaxis=dict(gridcolor='#e0e0e0', color='#1a1a1a', linecolor='#cccccc'),
-    yaxis=dict(gridcolor='#e0e0e0', color='#1a1a1a', linecolor='#cccccc'),
-    legend=dict(font=dict(color='#1a1a1a', family='monospace')),
+    xaxis=dict(
+        gridcolor='#e0e0e0',
+        color='#1a1a1a',
+        linecolor='#cccccc',
+        tickfont=dict(color='#1a1a1a', family='monospace'),
+        title_font=dict(color='#1a1a1a', family='monospace')
+    ),
+    yaxis=dict(
+        gridcolor='#e0e0e0',
+        color='#1a1a1a',
+        linecolor='#cccccc',
+        tickfont=dict(color='#1a1a1a', family='monospace'),
+        title_font=dict(color='#1a1a1a', family='monospace')
+    ),
+    legend=dict(
+        font=dict(color='#1a1a1a', family='monospace'),
+        title_font=dict(color='#1a1a1a', family='monospace')
+    ),
 )
 
 # ── Sentiment chart ────────────────────────────────────────────────────────────
