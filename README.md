@@ -68,13 +68,28 @@ reddit-conspiracy-analysis/
 
 ---
 
-## Limitations & Future Improvements
+## Data Limitations & Known Issues
 
-- **Manual categorization:** Subreddit categories were assigned manually — a known limitation
-- **Bag of Words context:** Single words lack context (e.g. "god" could mean "oh my god") — bigrams partially address this
-- **Dataset:** Uses `mteb/reddit-clustering` as a proxy — not actual conspiracy subreddits (r/conspiracy, r/conspiracytheories)
-- **Future:** Topic Modeling or semantic embeddings would provide deeper linguistic analysis
-- **Future:** Integration with Apify for real-time scraping of actual conspiracy subreddits
+This project was built under real-world constraints. Here's an honest assessment:
+
+**Data quality:**
+- Dataset covers 2012 Reddit data — the conspiracy landscape has changed significantly since (QAnon, COVID narratives, Pizzagate did not yet exist)
+- Class imbalance: 890 conspiracy posts vs 9,796 mainstream posts (11:1 ratio) — results should be interpreted with caution
+- Reddit API access was attempted but not obtained due to current API restrictions — pushshift archive was used as an alternative
+
+**Analytical limitations:**
+- Sentiment differences are small (-0.11 vs -0.03) and lack formal statistical significance testing — a future version should include p-values
+- NRCLex emotion detection runs on short post titles (avg 8-10 words) which limits reliability
+- Subreddit categorization (conspiracy vs mainstream) was done manually — a subjective decision
+
+**What I would do with more time:**
+- Obtain live Reddit API access for current data
+- Balance the dataset through undersampling or weighting
+- Add statistical significance tests (Mann-Whitney U test)
+- Use sentence embeddings instead of Bag of Words for deeper semantic analysis
+- Expand to full post text, not just titles
+
+> Note: Some conspiracy theories have historically proven true. Negative sentiment may reflect genuine institutional distrust rather than irrationality.
 
 ---
 
